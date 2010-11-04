@@ -419,3 +419,61 @@ class ViewTests(EmailConfirmationTestCase):
         self.assertEqual(models.EmailAddress.objects.get(pk=address.pk).verified, True)
         self.assertContains(response, "Confirmed %s" % self.email)
 
+
+
+class LoggedInViewTests(EmailConfirmationTestCase):
+
+    def setUp(self):
+        super(LoggedInViewTests, self).setUp()
+        self.user.set_password("sekrit")
+        self.user.is_active = True
+        self.user.save()
+
+        self.assertTrue(self.client.login(username=self.user.username, password="sekrit"))
+
+
+    def test_delete(self):
+        """
+        The ``delete`` view attempts to delete the POSTed ``email`` for the
+        logged-in user, and redirects to the named url
+        ``emailconfirmation_delete_done``.
+
+        """
+        address = models.EmailAddress.objects.create(user=self.user, email=self.email)
+
+        url = reverse("emailconfirmation_delete")
+
+        response = self.client.post(url, {"email": self.email})
+
+        self.assertRedirects(response, reverse("emailconfirmation_delete_done"))
+        self.assertFalse(models.EmailAddress.objects.exists())
+
+
+    def test_delete_respects_next(self):
+        """
+        The ``delete`` view will redirect to a "next" parameter passed via
+        POST.
+
+        """
+        address = models.EmailAddress.objects.create(user=self.user, email=self.email)
+
+        url = reverse("emailconfirmation_delete")
+
+        response = self.client.post(url, {"email": self.email, "next": "/"})
+
+        self.assertEqual(response["Location"], "http://testserver/")
+
+
+    def test_delete_respects_next_in_query(self):
+        """
+        The ``delete`` view will redirect to a "next" parameter passed via
+        query string.
+
+        """
+        address = models.EmailAddress.objects.create(user=self.user, email=self.email)
+
+        url = reverse("emailconfirmation_delete") + "?next=/"
+
+        response = self.client.post(url, {"email": self.email})
+
+        self.assertEqual(response["Location"], "http://testserver/")

@@ -14,6 +14,7 @@ if not settings.configured:
             'django.contrib.contenttypes',
             'django.contrib.auth',
             'django.contrib.sites',
+            'django.contrib.sessions',
             'emailconfirmation',
             'emailconfirmation.tests',
         ]
