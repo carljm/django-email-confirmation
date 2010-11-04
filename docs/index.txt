@@ -2,22 +2,21 @@
 django-email-confirmation
 #########################
 
-This simple app is for cases where you don't want to require an e-mail
-address to signup on your website but you do still want to ask for an
-e-mail address and be able to confirm it for use in optional parts of
-your website.
+``django-email-confirmation`` keeps track of multiple e-email addresses for
+users.  It provides models, forms, and views to allow users to see their
+current list of e-email addresses, confirm any that are unconfirmed, and
+mark one of the confirmed addresses as their primary e-mail address. Their
+primary e-mail address is synced with the ``email`` field of the
+``django.contrib.auth`` ``User`` model.
 
-A user can have zero or more e-mail addresses linked to them. The user
-does not have to provide an e-mail address on signup but, if they do,
-they are e-mailed with a link they must click on to confirm that the
-e-mail address is theirs. A confirmation e-mail can be resent at any
-time.
+A user can have zero or more e-mail addresses linked to them. When a user
+adds a new e-mail address, they are e-mailed with a link they must click on
+to confirm that the e-mail address is theirs.  A confirmation e-mail can be
+resent at any time.
 
-What's on the trunk here should be usable but I welcome feedback on how
-to make it better. The source contains a working project that shows all
-the features of the app as well as providing useful code for your own
-project (although Pinax is a more comprehensive example of how to use
-django-email-confirmation).
+The source contains a working project that shows all the features of the app
+as well as providing useful code for your own project (although Pinax is a
+more comprehensive example of how to use django-email-confirmation).
 
-This code is based in part on django-registration and is essentially
-a replacement for it where your requirements are different.
+This code is based in part on django-registration and can be used alongside
+it or as a replacement for it where your requirements are different.
